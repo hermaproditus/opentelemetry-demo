@@ -1,0 +1,107 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "webstore-metrics"
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "interval": "15s",
+      "options": {
+        "nodes": {
+          "arcs": [
+            {
+              "color": "#5794F2",
+              "field": "arc__color"
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "label_join(label_join(\n(rate(traces_service_graph_request_total{}[$__interval]))\n, \"id\", \"\", \"client\")\n, \"title\", \"\", \"client\")\n\nor\n\nlabel_join(label_join(\n(rate(traces_service_graph_request_total{}[$__interval]))\n, \"id\", \"\", \"server\")\n, \"title\", \"\", \"server\")\n",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "nodes"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "webstore-metrics"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "increase(\n  (sum by (id, source, target, mainStat) \n    (\n      (\n          label_replace(\n              label_replace(\n                  label_join(\n                    (traces_service_graph_request_total{})\n                    , \"id\", \":\", \"client\", \"server\")\n                    , \"source\", \"$1\", \"client\", \"(.*)\")\n                    , \"target\", \"$1\", \"server\", \"(.*)\")\n      )\n    )\n  )[$__range:$__interval]\n) > 0",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "edges"
+        }
+      ],
+      "title": "Service Map ☸️",
+      "type": "nodeGraph"
+    }
+  ],
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "ServiceGraph Dashboard",
+  "uid": "k0Om62pVf",
+  "version": 1,
+  "weekStart": ""
+}

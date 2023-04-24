@@ -45,7 +45,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [servicegraph, batch]
       exporters: [otlp, logging, spanmetrics]
     metrics:
       receivers: [otlp, spanmetrics]
